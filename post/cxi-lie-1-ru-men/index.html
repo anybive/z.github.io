@@ -1,0 +1,349 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C++系列(1) - 入门 | Gridea</title>
+<link rel="shortcut icon" href="https://blog.ziju.vip/favicon.ico?v=1643375093474">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://blog.ziju.vip/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="C++系列(1) - 入门 | Gridea - Atom Feed" href="https://blog.ziju.vip/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="参考
+C++参考书籍推荐：
+入门：高质量C/C++编程
+进修：Effective C++
+升级：STL源码剖析
+练习：leetcode、牛客
+C++语法
+C++作为C语言的升级版，基本上兼容C语言的绝大部分语法，对于与C语言相同的语法，此处..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://blog.ziju.vip">
+  <img class="avatar" src="https://blog.ziju.vip/images/avatar.png?v=1643375093474" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              C++系列(1) - 入门
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-01-28
+              </span>
+              <span>
+                11 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="参考">参考</h1>
+<p>C++参考书籍推荐：<br>
+<strong>入门</strong>：高质量C/C++编程<br>
+<strong>进修</strong>：Effective C++<br>
+<strong>升级</strong>：STL源码剖析<br>
+<strong>练习</strong>：<a href="leetcode-cn.com">leetcode</a>、<a href="nowcoder.com">牛客</a></p>
+<h1 id="c语法">C++语法</h1>
+<p>C++作为C语言的升级版，基本上兼容C语言的绝大部分语法，对于与C语言相同的语法，此处不再赘述<br>
+下面是C++基础语法部分。大部分为C++98标准中提出的内容</p>
+<h2 id="命名空间-namespace">命名空间 - namespace</h2>
+<p><strong>命名空间定义的是一个域</strong>，即一个命名空间就是一个作用域。<strong>C++用命名空间作为名字隔离</strong>，命名空间的提出实际上是为了解决C语言命名冲突的问题。<br>
+举例：<br>
+我们知道C语言的库中有两个函数用了scanf和strlen名称，假如我的代码想用这两个名称作为变量名，那么再在调用这两个库函数的时候就会出冲突。比较好的解决方法是将我自己的代码放入自己的命名空间中，这样在调用的时候只要指定自己的命名空间，就不会影响到其他同名变量、函数的使用。</p>
+<pre><code class="language-C++">namespace Z
+{
+    int scanf=10;
+    int strlen=20;
+}
+
+int main(){
+    printf(&quot;%x\n&quot;,scanf);
+    printf(&quot;%x\n&quot;,strlen); //此处打印的是函数地址
+    
+    printf(&quot;%x\n&quot;,Z::scanf);
+    printf(&quot;%x\n&quot;,Z::strlen);
+}
+</code></pre>
+<p>那么在命名空间中我们可以定义什么呢？<br>
+在命名空间中，我们可以定义函数、变量、类等等。但是使用时需要注意指定命名空间<br>
+::是域限定符，在函数、变量、或是类的前面加上它所属的命名空间名称，就是指定了这个变量、函数是该命名空间中的变量、函数。<br>
+C++提供的标准库中的内容都放入了std命名空间中。如果要使用标准库的内容，有三种方式可供选择：</p>
+<ol>
+<li>指定命名空间<pre><code class="language-C++">std::cout&lt;&lt;&quot;Hello C++&quot;&lt;&lt;std::endl;
+</code></pre>
+缺点：很显然，对每个标准库中的函数都要指定为std，是比较麻烦的一件事情</li>
+<li>把std整个展开<pre><code class="language-C++">using namespace std;
+</code></pre>
+这条语句放在main函数前面。相当于将整个标准库中的内容放入了全局域。使用标准库内容时固然是方便了，但是这样一来，命名空间也就基本失去了它的作用</li>
+<li>对部分常用的库函数进行展开<pre><code class="language-C++"> using std::cout;
+ using std::endl;
+</code></pre>
+这样在使用已展开的库函数时，就无需指定命名空间了，是比较常用的做法</li>
+</ol>
+<h2 id="缺省参数">缺省参数</h2>
+<p>在函数声明的时候可以写上缺省参数，如果调用时没有传这个参数就会用缺省的参数，传了就用传的形参。可以半缺省，即给某几个参数指定缺省值，而其余的不指定，这样在声明时，缺省只能从右往左缺省。调用时需要传入所有未指定缺省值的参数，否则会出现编译错误。<br>
+需要注意的是<strong>声明和定义位置不能同时出现缺省参数</strong></p>
+<pre><code class="language-C++">void Print(string str,int x);
+void Print(string str,int x=0)
+{}
+</code></pre>
+<h2 id="函数重载">函数重载</h2>
+<p>名字相同，参数不同的两个函数构成函数重载。<br>
+参数不同包括以下两种情况：</p>
+<ol>
+<li>参数类型不同</li>
+<li>参数个数不同<br>
+如果两个函数只有返回值不同，那么它们不构成重载。<br>
+需要注意的是，无论是否有缺省参数，都不影响函数重载<br>
+同时也需要注意，给定缺省时不应当引发歧义</li>
+</ol>
+<pre><code class="language-C++">void f(int a,int b,int c=1)
+{}
+void f(int a,int b)
+{}
+</code></pre>
+<p>例如在这个例子中，从语法的角度它们是构成重载的，但是f(1,2)这样调用会引发歧义，导致无法编译通过</p>
+<p><strong>那么为什么C语言不支持重载？ C++支持 ？C++底层是如何支持重载？</strong><br>
+在C、C++的编译过程中，有预处理、编译、汇编、链接四个步骤。</p>
+<ol>
+<li><strong>预处理</strong><br>
+头文件展开+宏替换+去掉注释+条件编译</li>
+<li><strong>编译</strong><br>
+检查语法，生成汇编代码</li>
+<li><strong>汇编</strong><br>
+把汇编代码转成二进制机器码</li>
+<li><strong>链接</strong><br>
+将不同的.o文件链接到一起，生成可执行程序<br>
+其中，在链接之前，函数调用会被汇编为call指令​。但是这里call没有对应的地址，因为include的只有.h文件，没有函数的地址。有了声明，编译阶段就可以通过了，函数定义会在链接的时候再去找<br>
+C语言中通过函数名去符号表中寻找函数地址，当有多个函数名字相同时，编译器无法分辨，因此不支持重载。<br>
+​	而C++中加入了<strong>函数名修饰规则</strong>，编译的时候会将函数名变更，链接的时候通过变更后的名字（函数名中加入了函数参数类型和个数）去寻找，这样就实现了重载。</li>
+</ol>
+<p><strong>extern “C” 的作用是什么</strong><br>
+在函数名之前加上extern “C” void ……，编译完成就可以直接被C语言的程序调用了，缺点是CPP程序在调用时也需要加上extern “C”。<br>
+并且函数被这个所修饰就无法重载了。原因是编译的时候编译器对该函数名会用C语言的规则所修饰，而不是C++的函数名修饰规则</p>
+<h2 id="引用">引用</h2>
+<pre><code class="language-C++">int a=10;
+int&amp; b=a;
+</code></pre>
+<p>在这里称b是a的引用<br>
+引用运算符和C语言中取地址的运算符相同，在类型后面表明是引用类型，在变量前面表明是取地址运算。<br>
+使用引用时可以嵌套引用，但是指向的内存地址仍然是同一个。这点跟指针不同，即指针允许有多重指针，但是引用不允许多重引用，无论引用多少次，都是最初的那个变量的引用（即一个变量可以有多个引用）。<br>
+引用在定义的时候就必须初始化，并且引用一旦确定，就不能再变更为其他实体的引用（重复进行=赋值操作，实际上就是对被引用的变量进行赋值了）。<br>
+C++中允许有空指针，但是不允许有空引用。这点也是引用跟指针不同的地方。<br>
+对引用变量进行修改，就等于同时修改被引用的变量。<br>
+对于const类型的变量，引用时要变为const类型的引用。但是对于非const类型的变量，也可以用const类型引用。</p>
+<pre><code class="language-C++">const int a=10;
+int&amp; ra=a;//会报错，权限放大
+const int&amp; raa=a;//OK，没问题
+int b=10;
+const int&amp; rb=b;//OK，权限缩小，只读
+</code></pre>
+<h3 id="在发生隐式类型转换时的特殊情况">在发生隐式类型转换时的特殊情况：</h3>
+<pre><code class="language-C++">int c=10;
+double d=1.11;
+d=c;
+
+double&amp; rc=c;//会报错
+const double&amp;rc=c;//不会报错
+</code></pre>
+<p>这是为什么呢？<br>
+在这里，将c赋值给d的过程中，会产生一个double类型的临时变量，c赋值给这个临时变量，再由这个临时变量赋值给d。而double类型的引用指向int类型的c会出错是因为临时变量具有常性，加了const不会出错是因为其指向的实际上是临时变量，const符合其常性。</p>
+<h3 id="引用的应用场景">引用的应用场景</h3>
+<ol>
+<li>
+<p>做参数<br>
+在程序的形参列表中做参数，用引用可以将参数的改变同步改到原程序中（可以替代指针用）</p>
+</li>
+<li>
+<p>做返回值<br>
+（只在特殊场景下可用）<br>
+正常程序返回时，也是有临时变量存在的，先将返回值赋值给临时变量，再将临时变量返回给源程序（因为在返回的时候，要返回的变量实际上已经不存在了，子程序已经退出了）<br>
+传值返回返回的是返回值的拷贝<br>
+传引用返回返回的是返回对象的引用<br>
+但是这个时候返回对象已经销毁了，因此会造成越界访问，同时造成返回值是不确定的<br>
+如果返回对象是static修饰的，那么引用返回也是可以的，因为这时候返回对象是在静态区，而不是栈中<br>
+<strong>关于越界的报错提示</strong><br>
+越界是不一定报错的。越界读基本不报错，因为编译器检查不出来；越界写可能会报错，系统查越界是抽查，经常检查数组结束的两个位置，（像查酒驾）当数组所在函数结束时，会检查检测位是否被更改。</p>
+<p>因此引用传参在 传大对象 多次调用 的时候可以提高效率</p>
+</li>
+</ol>
+<h3 id="引用与指针的区别小结">引用与指针的区别小结</h3>
+<ol>
+<li>引用概念上定义一个变量的别名，指针存储一个变量地址</li>
+<li>引用在定义时必须初始化，指针没有要求</li>
+<li>引用在初始化时引用一个实体后，就不能再引用其他实体，而指针可以在任何时候指向一个同类型实体</li>
+<li>没有NULL引用，但是有NULL指针</li>
+<li>在sizeof中含义不同：引用结果是引用类型的大小，但是指针始终是地址空间所占字节数</li>
+<li>引用自加即引用的实体+1，指针自加即指针向后偏移一个类型的大小</li>
+<li>有多级指针，但是没有多级引用</li>
+<li>访问实体方式不同，指针需要显式解引用，引用由编译器自己处理</li>
+<li>引用比指针使用起来相对更安全</li>
+<li>指针也是可以引用的，例如 int* pa=&amp;a; int*&amp; rpa=pa;</li>
+</ol>
+<h2 id="内联函数">内联函数</h2>
+<p>以inline修饰的函数叫内联函数，编译时C++编译器会在调用内联函数的地方展开，没有函数压栈的开销，可以提高内联函数的效率<br>
+相比来说，<strong>C语言</strong>中为了小函数避免建立栈帧的开销，提供了宏函数支持，在预处理阶段就展开了<br>
+那么<strong>C语言已经解决了这个问题，为什么C++还要提供内联函数？</strong><br>
+这也就是宏函数的缺点问题。宏函数的缺点：</p>
+<ol>
+<li>宏函数不支持调试</li>
+<li>宏函数语法复杂，容易出错</li>
+<li>没有类型安全的检查<br>
+例如写一个宏函数的ADD</li>
+</ol>
+<pre><code class="language-C">#define ADD(x, y) ((x)+(y))
+</code></pre>
+<p>写的很麻烦，例如不能带分号，要带括号等等<br>
+因此在C++中可以将频繁调用的小函数声明为内联函数。inline是一种空间换时间的做法，所以很长的代码或者循环、递归的函数不建议用内联。<br>
+并且，<strong>内联对于编译器只是一个建议，实际上编译器可能会自动优化</strong>。inline不建议声明和定义分离，分离会导致链接错误，因为inline被展开就没有函数地址了，导致找不到函数。</p>
+<p>对于宏定义，C++建议用const来代替宏定义</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
+<li><a href="#c%E8%AF%AD%E6%B3%95">C++语法</a>
+<ul>
+<li><a href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4-namespace">命名空间 - namespace</a></li>
+<li><a href="#%E7%BC%BA%E7%9C%81%E5%8F%82%E6%95%B0">缺省参数</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD">函数重载</a></li>
+<li><a href="#%E5%BC%95%E7%94%A8">引用</a>
+<ul>
+<li><a href="#%E5%9C%A8%E5%8F%91%E7%94%9F%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E6%97%B6%E7%9A%84%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5">在发生隐式类型转换时的特殊情况：</a></li>
+<li><a href="#%E5%BC%95%E7%94%A8%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">引用的应用场景</a></li>
+<li><a href="#%E5%BC%95%E7%94%A8%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E5%8C%BA%E5%88%AB%E5%B0%8F%E7%BB%93">引用与指针的区别小结</a></li>
+</ul>
+</li>
+<li><a href="#%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0">内联函数</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://blog.ziju.vip/post/hello-gridea/">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://blog.ziju.vip/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
